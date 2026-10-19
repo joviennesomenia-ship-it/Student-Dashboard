@@ -24,6 +24,7 @@ export default function AddModal() {
   const [at, setAt] = useState('')
   const [desc, setDesc] = useState('')
   const [sub, setSub] = useState('')
+  const [subIds, setSubIds] = useState<string[]>([])
   const [pri, setPri] = useState<'Low' | 'Medium' | 'High'>('Medium')
   const [emoji, setEmoji] = useState('📘')
   const [color, setColor] = useState('blue')
@@ -49,7 +50,7 @@ export default function AddModal() {
   const valid = isSubject ? title.trim() !== ''
     : isAnn ? title.trim() !== '' && desc.trim() !== ''
     : isRev ? title.trim() !== '' && effSub !== '' && (file !== null || linkUrl.trim() !== '')
-    : title.trim() !== '' && at !== ''
+    : title.trim() !== '' && at !== '' && (kind !== 'performanceTasks' || subIds.length > 0)
   const mySubjects = mine.filter((m) => m.kind === 'subjects').map((m) => m.item as Subject)
   const myAnns = mine.filter((m) => m.kind === 'announcements').map((m) => m.item as Announcement)
 
@@ -60,10 +61,10 @@ export default function AddModal() {
     const when = at.length === 16 ? `${at}:00` : at
     return kind === 'events'
       ? { id, title: title.trim(), startsAt: when, location: '', description: desc }
-      : { id, title: title.trim(), description: desc, subjectId: effSub, dueAt: when, priority: pri }
+      : { id, title: title.trim(), description: desc, subjectId: subIds[0] ?? effSub, ...(kind === 'performanceTasks' ? { subjectIds: subIds } : {}), dueAt: when, priority: pri }
   }
   const reset = () => {
-    setTitle(''); setDesc(''); setAt(''); setLinkLabel(''); setLinkUrl(''); setFile(null)
+    setTitle(''); setDesc(''); setAt(''); setLinkLabel(''); setLinkUrl(''); setFile(null); setSubIds([])
     if (fileRef.current) fileRef.current.value = ''
     setMsg('')
   }
@@ -97,8 +98,18 @@ export default function AddModal() {
     if (!gh.repo || !gh.token) { setMsg('Set up ⚙️ Class settings in the footer first (one time).'); return }
     setBusy(true); setMsg('')
     try {
-      if (kind === 'reviewers') await publishReviewer()
-      else await addToClass(kind, build(PREFIX[kind]) as { id: string }, gh)
+      if (kind === 'reviewers') {
+        await publishReviewer()
+      } else {
+        const item: Record<string, unknown> = { ...build(PREFIX[kind]) }
+        if (file) {
+          if (file.size > MAX_FILE) throw new Error('That file is over 20 MB. Upload it to Google Drive and add the link instead.')
+          const fname = `${Date.now()}-${file.name.replace(/[^\w.-]+/g, '_')}`
+          await uploadFile(gh, `public/files/${fname}`, file)
+          item.files = [{ name: file.name, url: `files/${fname}`, size: fmtSize(file.size), uploadedAt: today() }]
+        }
+        await addToClass(kind, item as { id: string }, gh)
+      }
       reset()
       setMsg('✅ Published. Students will see it after the site rebuilds (about 1–2 minutes).')
     } catch (e) {
@@ -172,7 +183,21 @@ export default function AddModal() {
               {!isSubject && !isAnn && !isRev && (
                 <>
                   <input type="datetime-local" className={inp} value={at} onChange={(e) => setAt(e.target.value)} aria-label="Date and time" />
-                  {kind !== 'events' && (
+                  {kind === 'performanceTasks' && (
+                    <div>
+                      <p className="mb-1 text-sm font-medium">Subjects (tick every subject this task covers)</p>
+                      <div className="grid grid-cols-2 gap-1">
+                        {data?.subjects.map((s) => (
+                          <label key={s.id} className="flex items-center gap-2 rounded-md border border-ink/15 px-2 py-1.5 text-sm">
+                            <input type="checkbox" className="accent-primary" checked={subIds.includes(s.id)}
+                              onChange={(e) => setSubIds((prev) => (e.target.checked ? [...prev, s.id] : prev.filter((x) => x !== s.id)))} />
+                            {s.emoji} {s.name}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {kind !== 'events' && kind !== 'performanceTasks' && (
                     <div className="flex gap-2">
                       <select className={inp} value={effSub} onChange={(e) => setSub(e.target.value)} aria-label="Subject">
                         {data?.subjects.map((s) => <option key={s.id} value={s.id}>{s.emoji} {s.name}</option>)}
@@ -183,6 +208,15 @@ export default function AddModal() {
                     </div>
                   )}
                   <textarea className={inp} rows={2} placeholder="Notes (optional)" value={desc} onChange={(e) => setDesc(e.target.value)} aria-label="Notes" />
+                  {kind !== 'events' && (
+                    <div className="rounded-md border border-dashed border-ink/25 p-3">
+                      <label className="block text-sm font-medium">📎 Attach a file (optional, up to 20 MB)
+                        <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg"
+                          onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="mt-2 block w-full text-sm" />
+                      </label>
+                      {file && <p className="mt-1 text-xs text-muted">Selected: {file.name} ({fmtSize(file.size)})</p>}
+                    </div>
+                  )}
                 </>
               )}
             </div>
