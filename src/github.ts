@@ -90,3 +90,14 @@ export async function uploadFile(gh: GhSettings, path: string, file: File, messa
   })
   if (!res.ok) throw new Error(explain(res.status) + ' while uploading the file.')
 }
+
+// Replaces one item in a list, keeping the id. `change` receives the existing item and returns the new one.
+export function updateInClass(list: ListName, id: string, change: (old: Record<string, unknown>) => Record<string, unknown>, gh: GhSettings): Promise<void> {
+  return updateReminders(gh, `Update ${id} in ${list}`, (json) => {
+    const arr = json[list]
+    if (!Array.isArray(arr)) throw new Error(`reminders.json has no "${list}" list.`)
+    const i = arr.findIndex((x: { id?: string }) => x.id === id)
+    if (i < 0) throw new Error('That item is not in reminders.json.')
+    arr[i] = change(arr[i])
+  })
+}
