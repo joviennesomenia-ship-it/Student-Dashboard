@@ -173,13 +173,6 @@
   ],
   "events": [
     {
-      "id": "ev-1",
-      "title": "Science Fair",
-      "startsAt": "2026-11-05T09:00:00",
-      "location": "School Gym",
-      "description": "Bring your project by 8:00 AM."
-    },
-    {
       "id": "ev-2",
       "title": "Parent-Teacher Conference",
       "startsAt": "2026-11-20T13:00:00",
