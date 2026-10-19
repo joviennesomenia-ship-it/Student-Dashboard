@@ -2,9 +2,9 @@
 export const CONFIG = {
   appName: 'Class Reminders',
   tagline: 'Stay on top of it',
-  teacher: 'Ms. Dela Cruz',
-  section: 'Grade 8 - Section Rizal',
-  contact: 'teacher@school.edu.ph',
+  teacher: 'Tchr.Andrea Y Aquino',
+  section: 'Grade 10 - Prudence',
+  contact: 'https://www.facebook.com/dheabells',
   timezone: 'Asia/Manila',
   utcOffset: '+08:00', // used for dates in reminders.json that have no timezone
   // SHA-256 of the teacher PIN. Default PIN is 'teacher2026'. Change it (see README).
