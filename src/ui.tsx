@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, type ReactNode } from 'react'
-import { useApp } from './store'
+import { useApp, useData } from './store'
 import DeleteShared from './DeleteShared'
 import { COLORS, asset, countdown, dateParts, downloadIcs, fmt, hasDate, taskSubjects } from './utils'
 import type { Subject, Task } from './types'
@@ -43,14 +43,16 @@ function CheckBtn({ on, onClick }: { on: boolean; onClick: () => void }) {
   )
 }
 export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
-  const { done, toggle, removeMine } = useApp()
+  const { done, toggle, removeMine, teacher, setEditTarget, setAdding } = useApp()
+  const { data } = useData()
   const [open, setOpen] = useState(false)
   const ts = taskSubjects(t, subs)
   const s = ts[0] // first subject sets the colour stripe
   const isDone = done.includes(t.id)
   const c = countdown(t.dueAt)
   const dt = dateParts(t.dueAt)
-  const mine = t.id.startsWith('me-') 
+  const mine = t.id.startsWith('me-')
+  const editKind = data?.performanceTasks.some((x) => x.id === t.id) ? 'performanceTasks' : 'tasks'
   return (
     <motion.li layout variants={item} className={`overflow-hidden rounded-lg border bg-card transition-colors ${isDone ? 'border-ink/10' : 'border-ink/15 hover:border-primary/60'}`}
       style={{ boxShadow: `inset 4px 0 0 ${COLORS[s?.color ?? 'blue'] ?? COLORS.blue}` }}>
@@ -80,6 +82,7 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
               <div className="flex flex-wrap gap-4 font-medium">
                 {t.links?.map((l) => <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="text-primary underline">🔗 {l.label}</a>)}
                 <button onClick={() => downloadIcs([{ id: t.id, title: t.title, at: t.dueAt, description: t.description }])} className="text-primary underline">🗓️ Add to calendar</button>
+                {teacher && !mine && <button onClick={() => { setEditTarget({ kind: editKind, item: t }); setAdding(true) }} className="text-primary underline">✏️ Edit</button>}
                 {!mine && <DeleteShared id={t.id} />}
                 {mine && <button onClick={() => removeMine(t.id)} className="text-accent underline">🗑️ Remove</button>}
               </div>
