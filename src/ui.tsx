@@ -76,7 +76,7 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
                   📎 {f.name}{f.size ? ` (${f.size})` : ''}
                 </a>
               ))}
-              <p className="text-muted">{hasDate(t.dueAt) ? 'Due ' : ''}{fmt(t.dueAt)}
+              <p className="text-muted">{hasDate(t.dueAt) ? 'Due ' : ''}{fmt(t.dueAt)}{t.priority ? ` · ${t.priority} priority` : ''}</p>
               <div className="flex flex-wrap gap-4 font-medium">
                 {t.links?.map((l) => <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="text-primary underline">🔗 {l.label}</a>)}
                 <button onClick={() => downloadIcs([{ id: t.id, title: t.title, at: t.dueAt, description: t.description }])} className="text-primary underline">🗓️ Add to calendar</button>
