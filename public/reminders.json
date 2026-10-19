@@ -2,7 +2,7 @@
   "subjects": [
     { "id": "sub-1", "name": "Mathematics", "emoji": "📐", "color": "blue" },
     { "id": "sub-2", "name": "Science", "emoji": "🔬", "color": "green" },
-    { "id": "sub-3", "name": "English", "emoji": "📖", "color": "purple" }
+    { "id": "sub-3", "name": "English", "emoji": "📖", "color": "purple" },
     {"id": "sub-4", "name": "MusicArts","emoji": "🎨","color": "orange"}
   ],
   "tasks": [
