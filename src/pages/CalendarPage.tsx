@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useState } from 'react'
 import { useData } from '../store'
 import { Empty, Skeleton, Tabs, Title, cardCls } from '../ui'
-import { dayKey, downloadIcs, fmt, parse } from '../utils'
+import { dayKey, downloadIcs, fmt, hasDate, parse } from '../utils'
 
 const TYPE = { task: ['📋', 'bg-primary'], pt: ['🎯', 'bg-accent'], event: ['🎉', 'bg-emerald-600'] } as const
 interface Entry { id: string; title: string; at: string; type: keyof typeof TYPE; description?: string }
