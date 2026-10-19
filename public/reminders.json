@@ -206,13 +206,6 @@
   ],
   "announcements": [
     {
-      "id": "ann-1",
-      "title": "Welcome Back!",
-      "body": "Please check the updated syllabus.",
-      "pinned": true,
-      "createdAt": "2026-10-18"
-    },
-    {
       "id": "ann-2",
       "title": "Bring your ID",
       "body": "IDs are required for the science fair.",
