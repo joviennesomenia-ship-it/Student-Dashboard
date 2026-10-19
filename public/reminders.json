@@ -97,20 +97,6 @@
   ],
   "performanceTasks": [
     {
-      "id": "pt-1",
-      "title": "Poster: Ecosystems",
-      "description": "Make a poster showing a local ecosystem.",
-      "subjectId": "sub-2",
-      "dueAt": "2026-11-03T08:00:00",
-      "rubric": "Accuracy 40%, Creativity 30%, Neatness 20%, Teamwork 10%",
-      "links": [
-        {
-          "label": "Poster examples",
-          "url": "https://www.youtube.com"
-        }
-      ]
-    },
-    {
       "id": "pt-2",
       "title": "Oral Presentation",
       "description": "5-minute talk on your favorite book.",
