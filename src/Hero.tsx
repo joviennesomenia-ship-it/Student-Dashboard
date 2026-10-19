@@ -34,24 +34,24 @@ export default function Hero({ announcements }: { announcements: Announcement[] 
 
   return (
     <section aria-roledescription="carousel" aria-label="Highlights" className="relative grid overflow-hidden rounded-2xl border border-ink/15 bg-card md:grid-cols-[1fr_1.15fr]">
-      <div className="relative flex min-h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-primary/50 px-14 py-8">
+      <div className="relative flex min-h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-primary/50 px-12 py-6 md:min-h-56 md:px-14 md:py-8">
         <span aria-hidden className="absolute -left-12 -top-12 h-44 w-44 rounded-full bg-white/10" />
         <span aria-hidden className="absolute -bottom-16 right-0 h-52 w-52 rounded-full bg-accent/50" />
-        <div className="relative flex items-center gap-3">
+        <div className="relative flex items-center gap-2 md:gap-3">
           {TILES.map((e, k) => (
             <motion.div key={e} animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, delay: k * 0.4, ease: 'easeInOut' }}
-              className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-white/20 text-4xl shadow-lg backdrop-blur ${k === 1 ? '-mt-6' : k === 2 ? 'mt-6' : ''}`}>
+              className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 text-2xl md:h-20 md:w-20 md:text-4xl shadow-lg backdrop-blur ${k === 1 ? '-mt-6' : k === 2 ? 'mt-6' : ''}`}>
               {e}
             </motion.div>
           ))}
         </div>
       </div>
 
-      <div className="relative flex flex-col justify-center py-8 pl-8 pr-16 pb-16 md:py-10 md:pl-10 md:pr-16">
+      <div className="relative flex flex-col justify-center px-6 py-6 pb-14 pr-12 md:px-10 md:py-10 md:pb-16 md:pr-16">
         <AnimatePresence mode="wait">
           <motion.div key={cur.id} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.25 }}>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{cur.eyebrow}</p>
-            <h2 className="mt-2 font-display text-4xl font-extrabold uppercase leading-none tracking-tight md:text-5xl">{cur.title}</h2>
+            <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-none tracking-tight md:text-5xl">{cur.title}</h2>
             <p className="mt-3 inline-block bg-accent px-3 py-1 font-display text-lg font-bold uppercase text-onp">{cur.highlight}</p>
             <p className="mt-4 max-w-md text-muted">{cur.body}</p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
