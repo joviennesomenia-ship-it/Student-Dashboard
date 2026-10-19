@@ -57,20 +57,6 @@
   ],
   "tasks": [
     {
-      "id": "task-2",
-      "title": "Lab Report: Plant Growth",
-      "description": "Submit the written report with graphs.",
-      "subjectId": "sub-2",
-      "dueAt": "2026-10-20T17:00:00",
-      "priority": "High",
-      "links": [
-        {
-          "label": "Report template",
-          "url": "https://docs.google.com"
-        }
-      ]
-    },
-    {
       "id": "task-3",
       "title": "Reading Log Chapter 5",
       "description": "Write a one-paragraph summary.",
