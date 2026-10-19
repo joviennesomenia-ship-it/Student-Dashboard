@@ -151,29 +151,7 @@
       "priority": "Medium"
     }
   ],
-  "reviewers": [
-    {
-      "id": "rev-2",
-      "title": "Ecosystems Notes",
-      "description": "Producers, consumers and food webs.",
-      "subjectId": "sub-2",
-      "tag": "Quarter 2",
-      "files": [
-        {
-          "name": "ecosystems.pptx",
-          "url": "https://example.com/ecosystems.pptx",
-          "size": "3.4 MB",
-          "uploadedAt": "2026-10-12"
-        }
-      ],
-      "links": [
-        {
-          "label": "Google Drive folder",
-          "url": "https://drive.google.com"
-        }
-      ]
-    }
-  ],
+  "reviewers": [],
   "events": [
     {
       "id": "ev-1792421361013",
