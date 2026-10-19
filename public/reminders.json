@@ -153,27 +153,6 @@
   ],
   "reviewers": [
     {
-      "id": "rev-1",
-      "title": "Algebra Reviewer",
-      "description": "Linear equations and inequalities.",
-      "subjectId": "sub-1",
-      "tag": "Quarter 2",
-      "files": [
-        {
-          "name": "algebra-reviewer.pdf",
-          "url": "files/algebra-reviewer.pdf",
-          "size": "1.2 MB",
-          "uploadedAt": "2026-10-10"
-        }
-      ],
-      "links": [
-        {
-          "label": "Video lesson",
-          "url": "https://www.youtube.com"
-        }
-      ]
-    },
-    {
       "id": "rev-2",
       "title": "Ecosystems Notes",
       "description": "Producers, consumers and food webs.",
