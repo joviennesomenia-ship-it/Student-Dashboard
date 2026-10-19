@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useApp, useData, type Mine } from './store'
 import { Tabs } from './ui'
-import { COLORS } from './utils'
+import { COLORS, NO_DATE } from './utils'
 import { CONFIG } from './config'
 import { addToClass, uploadFile } from './github'
 import type { Announcement, Subject, Term } from './types'
@@ -22,6 +22,8 @@ export default function AddModal() {
   const [kind, setKind] = useState<AddKind>('tasks')
   const [title, setTitle] = useState('')
   const [at, setAt] = useState('')
+  const [dDate, setDDate] = useState('')
+  const [dTime, setDTime] = useState('')
   const [desc, setDesc] = useState('')
   const [sub, setSub] = useState('')
   const [subIds, setSubIds] = useState<string[]>([])
@@ -50,7 +52,7 @@ export default function AddModal() {
   const valid = isSubject ? title.trim() !== ''
     : isAnn ? title.trim() !== '' && desc.trim() !== ''
     : isRev ? title.trim() !== '' && effSub !== '' && (file !== null || linkUrl.trim() !== '')
-    : title.trim() !== '' && at !== '' && (kind !== 'performanceTasks' || subIds.length > 0)
+    : title.trim() !== '' && (kind !== 'events' || at !== '') && (kind !== 'performanceTasks' || subIds.length > 0)
   const mySubjects = mine.filter((m) => m.kind === 'subjects').map((m) => m.item as Subject)
   const myAnns = mine.filter((m) => m.kind === 'announcements').map((m) => m.item as Announcement)
 
@@ -58,13 +60,15 @@ export default function AddModal() {
     const id = `${prefix}${Date.now()}`
     if (isSubject) return { id, name: title.trim(), emoji: emoji.trim() || '📘', color }
     if (isAnn) return { id, title: title.trim(), body: desc.trim(), pinned, createdAt: today() }
-    const when = at.length === 16 ? `${at}:00` : at
+    const when = kind === 'events'
+      ? (at.length === 16 ? `${at}:00` : at)
+      : (dDate ? `${dDate}T${dTime || '23:59'}:00` : NO_DATE)
     return kind === 'events'
       ? { id, title: title.trim(), startsAt: when, location: '', description: desc }
       : { id, title: title.trim(), description: desc, subjectId: subIds[0] ?? effSub, ...(kind === 'performanceTasks' ? { subjectIds: subIds } : {}), dueAt: when, priority: pri }
   }
   const reset = () => {
-    setTitle(''); setDesc(''); setAt(''); setLinkLabel(''); setLinkUrl(''); setFile(null); setSubIds([])
+    setTitle(''); setDesc(''); setAt(''); setDDate(''); setDTime(''); setLinkLabel(''); setLinkUrl(''); setFile(null); setSubIds([])
     if (fileRef.current) fileRef.current.value = ''
     setMsg('')
   }
@@ -182,7 +186,17 @@ export default function AddModal() {
 
               {!isSubject && !isAnn && !isRev && (
                 <>
-                  <input type="datetime-local" className={inp} value={at} onChange={(e) => setAt(e.target.value)} aria-label="Date and time" />
+                  {kind === 'events' ? (
+                    <input type="datetime-local" className={inp} value={at} onChange={(e) => setAt(e.target.value)} aria-label="Date and time" />
+                  ) : (
+                    <div>
+                      <div className="flex gap-2">
+                        <input type="date" className={inp} value={dDate} onChange={(e) => setDDate(e.target.value)} aria-label="Due date" />
+                        <input type="time" className={`${inp} w-32`} value={dTime} onChange={(e) => setDTime(e.target.value)} aria-label="Due time (optional)" />
+                      </div>
+                      <p className="mt-1 text-xs text-muted">Date is optional. No time means 11:59 PM on that day.</p>
+                    </div>
+                  )}
                   {kind === 'performanceTasks' && (
                     <div>
                       <p className="mb-1 text-sm font-medium">Subjects (tick every subject this task covers)</p>
