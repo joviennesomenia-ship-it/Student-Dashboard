@@ -5,8 +5,9 @@ export interface Task {
   priority?: 'Low' | 'Medium' | 'High'; rubric?: string; links?: Link[]
 }
 export interface FileRef { name: string; url: string; size?: string; uploadedAt?: string }
+export type Term = 'Term 1' | 'Term 2' | 'Term 3'
 export interface Reviewer {
-  id: string; title: string; description?: string; subjectId: string; tag?: string
+  id: string; title: string; description?: string; subjectId: string; term?: Term; tag?: string
   files?: FileRef[]; links?: Link[]
 }
 export interface EventItem { id: string; title: string; startsAt: string; location?: string; description?: string }
