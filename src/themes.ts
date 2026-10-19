@@ -9,12 +9,15 @@ export const THEMES: Record<string, { label: string } & Partial<T>> = {
   graphite: { label: 'Graphite', primary: '51 65 85', accent: '185 28 28', bg: '241 245 249' },
   dark: { label: 'Dark', primary: '96 165 250', accent: '248 113 113', bg: '15 23 42', card: '30 41 59', text: '241 245 249', muted: '148 163 184', onp: '15 23 42' },
 }
+// The preset sets the background, text and card colours. If custom colours are given,
+// they replace only the main (primary) and accent colours, so any preset can be used with them.
 export const themeVars = (name: string, p?: string, a?: string): T => {
   const v = { ...base, ...(THEMES[name] ?? {}) } as T
-  if (name === 'custom' && p && a) {
+  if (p && a) {
     const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16))
     const [r, g, b] = rgb(p)
-    v.primary = rgb(p).join(' '); v.accent = rgb(a).join(' ')
+    v.primary = rgb(p).join(' ')
+    v.accent = rgb(a).join(' ')
     v.onp = 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '17 24 39' : '255 255 255'
   }
   return v
