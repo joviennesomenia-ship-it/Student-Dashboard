@@ -33,7 +33,7 @@ export default function Hero({ announcements }: { announcements: Announcement[] 
   }, [paused, n])
 
   return (
-    <section aria-roledescription="carousel" aria-label="Highlights" className="relative grid overflow-hidden rounded-2xl border border-ink/15 bg-card md:grid-cols-[1fr_1.15fr]">
+    <section aria-roledescription="carousel" aria-label="Highlights" className="relative grid grid-cols-1 overflow-hidden rounded-2xl border border-ink/15 bg-card md:grid-cols-[1fr_1.15fr]">
       <div className="relative flex min-h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-primary/50 px-12 py-6 md:min-h-56 md:px-14 md:py-8">
         <span aria-hidden className="absolute -left-12 -top-12 h-44 w-44 rounded-full bg-white/10" />
         <span aria-hidden className="absolute -bottom-16 right-0 h-52 w-52 rounded-full bg-accent/50" />
