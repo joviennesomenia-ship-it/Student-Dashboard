@@ -195,15 +195,7 @@
       ]
     }
   ],
-  "events": [
-    {
-      "id": "ev-1792418638038",
-      "title": "UN MONTH!",
-      "startsAt": "2026-10-23T12:00:00",
-      "location": "",
-      "description": "(Im not sure if this is the final date)"
-    }
-  ],
+  "events": [],
   "announcements": [
     {
       "id": "ann-1792419984973",
