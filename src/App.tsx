@@ -41,11 +41,11 @@ function Shell() {
   useEffect(() => { if (searchOpen) inputRef.current?.focus() }, [searchOpen])
 
   return (
-    <div className="min-h-screen pb-20 lg:pb-0">
+    <div className="min-h-screen overflow-x-hidden pb-20 lg:pb-0">
       <header className="sticky top-0 z-30">
         {/* Utility bar */}
         <div className="bg-slate-950 text-slate-200">
-          <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2 text-sm">
+          <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 py-2 text-xs sm:gap-4 sm:px-4 sm:text-sm">
             <span className="truncate">🎓 {CONFIG.section}</span>
             <div className="ml-auto flex items-center gap-4">
               <Link to="/announcements" className="hidden font-medium hover:text-white sm:inline">📢 Announcements</Link>
@@ -60,11 +60,11 @@ function Shell() {
 
         {/* Main navbar */}
         <div className="border-b border-ink/15 bg-card/95 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
+          <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 py-3 sm:gap-6 sm:px-4">
             <Link to="/" className="flex shrink-0 items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-xl">📋</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-lg sm:h-10 sm:w-10 sm:text-xl">📋</span>
               <span>
-                <span className="block font-display text-lg font-bold leading-tight text-primary">{CONFIG.appName}</span>
+                <span className="block font-display text-base font-bold leading-tight text-primary sm:text-lg">{CONFIG.appName}</span>
                 <span className="block text-[11px] font-bold uppercase tracking-wider text-accent">{CONFIG.tagline}</span>
               </span>
             </Link>
@@ -81,8 +81,8 @@ function Shell() {
               ))}
             </nav>
             <div className="ml-auto flex items-center gap-2">
-              {teacher && <button onClick={() => setAdding(true)} className="rounded-md bg-primary px-4 py-2 text-sm font-bold text-onp">＋ Add</button>}
-              <Link to="/tasks" className="rounded-md bg-accent px-4 py-2 text-sm font-bold text-onp">⏰ My tasks</Link>
+              {teacher && <button onClick={() => setAdding(true)} className="rounded-md bg-primary px-3 py-2 text-xs font-bold text-onp sm:px-4 sm:text-sm">＋ Add</button>}
+              <Link to="/tasks" className="rounded-md bg-accent px-3 py-2 text-xs font-bold text-onp sm:px-4 sm:text-sm">⏰ My tasks</Link>
               <Link to="/calendar" className="hidden rounded-md bg-ink px-4 py-2 text-sm font-bold text-bg sm:block">🗓️ Calendar</Link>
             </div>
           </div>
