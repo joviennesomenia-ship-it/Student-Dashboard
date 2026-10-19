@@ -3,6 +3,12 @@
     { "id": "sub-1", "name": "Mathematics", "emoji": "📐", "color": "blue" },
     { "id": "sub-2", "name": "Science", "emoji": "🔬", "color": "green" },
     { "id": "sub-3", "name": "English", "emoji": "📖", "color": "purple" }
+    {
+  "id": "sub-1792401161663",
+  "name": "MusicArts",
+  "emoji": "🎨",
+  "color": "red"
+},
   ],
   "tasks": [
     { "id": "task-1", "title": "Algebra Problem Set", "description": "Complete exercises 1-10", "subjectId": "sub-1", "dueAt": "2026-10-16T23:59:00", "priority": "High" },
