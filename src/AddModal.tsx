@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { useApp, useData, type Mine } from './store'
+import { useApp, useData, type EditTarget, type Mine } from './store'
 import { Tabs } from './ui'
-import { COLORS, NO_DATE } from './utils'
+import { COLORS, NO_DATE, hasDate, taskSubjectIds } from './utils'
 import { CONFIG } from './config'
-import { addToClass, uploadFile } from './github'
-import type { Announcement, Subject, Term } from './types'
+import { addToClass, updateInClass, uploadFile } from './github'
+import type { Announcement, FileRef, Subject, Term } from './types'
 
 type AddKind = Mine['kind'] | 'reviewers'
 const inp = 'w-full rounded-md border border-ink/20 bg-bg px-3 py-2 text-sm'
@@ -17,7 +17,7 @@ const today = () => new Date().toLocaleDateString('en-CA', { timeZone: CONFIG.ti
 const fmtSize = (b: number) => (b >= 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`)
 
 export default function AddModal() {
-  const { adding, setAdding, addMine, mine, removeMine, gh } = useApp()
+  const { adding, setAdding, addMine, mine, removeMine, gh, editTarget, setEditTarget } = useApp()
   const { data } = useData()
   const [kind, setKind] = useState<AddKind>('tasks')
   const [title, setTitle] = useState('')
@@ -48,6 +48,29 @@ export default function AddModal() {
     return () => window.removeEventListener('keydown', k)
   }, [setAdding])
 
+  // When a task is opened for editing, fill the form with its current values
+  useEffect(() => {
+    if (!editTarget) return
+    const t = editTarget.item
+    setKind(editTarget.kind)
+    setTitle(t.title)
+    setDesc(t.description ?? '')
+    setSub(t.subjectId)
+    setSubIds(taskSubjectIds(t))
+    setPri(t.priority ?? 'Medium')
+    if (hasDate(t.dueAt)) {
+      setDDate(t.dueAt.slice(0, 10))
+      const time = t.dueAt.slice(11, 16)
+      setDTime(time === '23:59' ? '' : time)
+    } else {
+      setDDate(''); setDTime('')
+    }
+    setFile(null); setMsg('')
+  }, [editTarget])
+
+  // Closing the form ends any edit in progress
+  useEffect(() => { if (!adding) setEditTarget(null) }, [adding, setEditTarget])
+
   const effSub = sub || data?.subjects[0]?.id || ''
   const valid = isSubject ? title.trim() !== ''
     : isAnn ? title.trim() !== '' && desc.trim() !== ''
@@ -56,16 +79,24 @@ export default function AddModal() {
   const mySubjects = mine.filter((m) => m.kind === 'subjects').map((m) => m.item as Subject)
   const myAnns = mine.filter((m) => m.kind === 'announcements').map((m) => m.item as Announcement)
 
+  const dueValue = () => (dDate ? `${dDate}T${dTime || '23:59'}:00` : NO_DATE)
+  const taskFields = () => ({
+    title: title.trim(),
+    description: desc,
+    subjectId: subIds[0] ?? effSub,
+    ...(kind === 'performanceTasks' ? { subjectIds: subIds } : {}),
+    dueAt: dueValue(),
+    priority: pri,
+  })
   const build = (prefix: string): Mine['item'] => {
     const id = `${prefix}${Date.now()}`
     if (isSubject) return { id, name: title.trim(), emoji: emoji.trim() || '📘', color }
     if (isAnn) return { id, title: title.trim(), body: desc.trim(), pinned, createdAt: today() }
-    const when = kind === 'events'
-      ? (at.length === 16 ? `${at}:00` : at)
-      : (dDate ? `${dDate}T${dTime || '23:59'}:00` : NO_DATE)
-    return kind === 'events'
-      ? { id, title: title.trim(), startsAt: when, location: '', description: desc }
-      : { id, title: title.trim(), description: desc, subjectId: subIds[0] ?? effSub, ...(kind === 'performanceTasks' ? { subjectIds: subIds } : {}), dueAt: when, priority: pri }
+    if (kind === 'events') {
+      const when = at.length === 16 ? `${at}:00` : at
+      return { id, title: title.trim(), startsAt: when, location: '', description: desc }
+    }
+    return { id, ...taskFields() }
   }
   const reset = () => {
     setTitle(''); setDesc(''); setAt(''); setDDate(''); setDTime(''); setLinkLabel(''); setLinkUrl(''); setFile(null); setSubIds([])
@@ -98,10 +129,31 @@ export default function AddModal() {
     await addToClass('reviewers', rev as { id: string }, gh)
   }
 
+  const publishEdit = async (target: EditTarget) => {
+    const newFiles: FileRef[] = []
+    if (file) {
+      if (file.size > MAX_FILE) throw new Error('That file is over 20 MB. Upload it to Google Drive and add the link instead.')
+      const fname = `${Date.now()}-${file.name.replace(/[^\w.-]+/g, '_')}`
+      await uploadFile(gh, `public/files/${fname}`, file)
+      newFiles.push({ name: file.name, url: `files/${fname}`, size: fmtSize(file.size), uploadedAt: today() })
+    }
+    await updateInClass(target.kind, target.item.id, (old) => {
+      const files = [...((old.files as FileRef[] | undefined) ?? []), ...newFiles]
+      return { ...old, ...taskFields(), ...(files.length ? { files } : {}) }
+    }, gh)
+  }
+
   const publish = async () => {
     if (!gh.repo || !gh.token) { setMsg('Set up ⚙️ Class settings in the footer first (one time).'); return }
     setBusy(true); setMsg('')
     try {
+      if (editTarget) {
+        await publishEdit(editTarget)
+        setBusy(false)
+        reset()
+        setAdding(false)
+        return
+      }
       if (kind === 'reviewers') {
         await publishReviewer()
       } else {
@@ -130,9 +182,11 @@ export default function AddModal() {
           <motion.div role="dialog" aria-modal="true" aria-label="Add" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 380, damping: 32 }} onClick={(e) => e.stopPropagation()}
             className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl bg-card p-5 shadow-2xl">
-            <h2 className="mb-3 font-display text-xl font-semibold">Add to class</h2>
-            <Tabs id="add-kind" value={kind} onChange={(v) => { setKind(v as AddKind); setMsg('') }}
-              items={[['tasks', '📋 Task'], ['performanceTasks', '🎯 Perf. task'], ['events', '🎉 Event'], ['reviewers', '📚 Reviewer'], ['announcements', '📢 Announcement'], ['subjects', '📘 Subject']]} />
+            <h2 className="mb-3 font-display text-xl font-semibold">{editTarget ? (editTarget.kind === 'performanceTasks' ? 'Edit performance task' : 'Edit task') : 'Add to class'}</h2>
+            {!editTarget && (
+              <Tabs id="add-kind" value={kind} onChange={(v) => { setKind(v as AddKind); setMsg('') }}
+                items={[['tasks', '📋 Task'], ['performanceTasks', '🎯 Perf. task'], ['events', '🎉 Event'], ['reviewers', '📚 Reviewer'], ['announcements', '📢 Announcement'], ['subjects', '📘 Subject']]} />
+            )}
 
             <div className="space-y-3">
               <input autoFocus className={inp} value={title} onChange={(e) => setTitle(e.target.value)}
@@ -236,9 +290,9 @@ export default function AddModal() {
             </div>
 
             <button disabled={!valid || busy} onClick={publish} className="mt-4 w-full rounded-md bg-accent py-2.5 font-semibold text-onp disabled:opacity-40">
-              {busy ? 'Publishing…' : '📤 Publish to class'}
+              {busy ? 'Saving…' : editTarget ? '💾 Save changes' : '📤 Publish to class'}
             </button>
-            {!isRev && (
+            {!isRev && !editTarget && (
               <div className="mt-2 flex gap-2">
                 <button disabled={!valid} onClick={save} className="flex-1 rounded-md bg-primary py-2 text-sm font-semibold text-onp disabled:opacity-40">
                   {isSubject ? 'Add on this device' : isAnn ? 'Post on this device' : 'Add to my list'}
