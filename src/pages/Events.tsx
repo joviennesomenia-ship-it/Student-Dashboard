@@ -18,7 +18,7 @@ export default function Events() {
       <Title>🎉 Events</Title>
       <Tabs id="ev-tab" value={tab} onChange={setTab} items={[['up', 'Upcoming'], ['arch', 'Archive']]} />
       {rows.length === 0 ? <Empty emoji="🎉" text="No events to show." /> : (
-        <motion.ul key={tab + q} variants={list} initial="h" animate="s" className="grid gap-3 md:grid-cols-2">
+        <motion.ul key={tab + q} variants={list} initial="h" animate="s" className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {rows.map((e) => (
             <motion.li key={e.id} variants={item} whileHover={{ y: -2 }} className={cardCls}>
               <div className="flex justify-between gap-2"><h3 className="text-lg font-semibold">{e.title}</h3>{tab === 'up' && <Badge tone={countdown(e.startsAt, 'Starts').tone}>{countdown(e.startsAt, 'Starts').label}</Badge>}</div>
