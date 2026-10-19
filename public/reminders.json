@@ -173,13 +173,6 @@
   ],
   "events": [
     {
-      "id": "ev-2",
-      "title": "Parent-Teacher Conference",
-      "startsAt": "2026-11-20T13:00:00",
-      "location": "Room 204",
-      "description": "Report card distribution."
-    },
-    {
       "id": "ev-3",
       "title": "Intramurals Opening",
       "startsAt": "2026-10-10T08:00:00",
