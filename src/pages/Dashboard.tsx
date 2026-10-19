@@ -41,7 +41,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {stats.map((s) => (
           <Link key={s.label} to={s.to} className="flex items-center gap-4 rounded-xl border border-ink/15 bg-card p-4 transition-colors hover:border-primary/60">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ink/5 text-2xl">{s.icon}</span>
@@ -53,7 +53,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <section>
           <Head>⏰ Due soon</Head>
           {soon.length === 0 ? (
