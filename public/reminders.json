@@ -95,16 +95,7 @@
       "priority": "Medium"
     }
   ],
-  "performanceTasks": [
-    {
-      "id": "pt-2",
-      "title": "Oral Presentation",
-      "description": "5-minute talk on your favorite book.",
-      "subjectId": "sub-3",
-      "dueAt": "2026-11-14T08:00:00",
-      "rubric": "Content 50%, Delivery 30%, Visuals 20%"
-    }
-  ],
+  "performanceTasks": [],
   "reviewers": [
     {
       "id": "rev-1",
