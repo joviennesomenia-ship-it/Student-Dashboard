@@ -55,16 +55,7 @@
       "color": "yellow"
     }
   ],
-  "tasks": [
-    {
-      "id": "task-4",
-      "title": "Geometry Worksheet",
-      "description": "Pages 44-46",
-      "subjectId": "sub-1",
-      "dueAt": "2026-11-01T23:59:00",
-      "priority": "Medium"
-    }
-  ],
+  "tasks": [],
   "performanceTasks": [],
   "reviewers": [
     {
