@@ -5,7 +5,10 @@ export const parse = (s: string) => {
   return new Date((s.length === 10 ? s + 'T00:00:00' : s) + CONFIG.utcOffset)
 }
 const tz = { timeZone: CONFIG.timezone }
-export const fmt = (s: string) => parse(s).toLocaleString('en-PH', { ...tz, dateStyle: 'medium', timeStyle: 'short' })
+// Tasks with no date are stored with this sentinel so they sort last and never show as due.
+export const NO_DATE = '2099-12-31T23:59:00'
+export const hasDate = (s: string) => !s.startsWith('2099-12-31')
+export const fmt = (s: string) => (hasDate(s) ? parse(s).toLocaleString('en-PH', { ...tz, dateStyle: 'medium', timeStyle: 'short' }) : 'No due date')
 export const dayKey = (d: Date) => d.toLocaleDateString('en-CA', tz)
 export const match = (q: string, ...f: (string | undefined)[]) => !q || f.join(' ').toLowerCase().includes(q.toLowerCase())
 export const asset = (u: string) => (/^https?:/.test(u) ? u : import.meta.env.BASE_URL + u)
@@ -13,6 +16,7 @@ export const COLORS: Record<string, string> = {
   blue: '#2563eb', green: '#15803d', red: '#dc2626', purple: '#7c3aed', orange: '#c2410c', teal: '#0f766e', pink: '#FFB6C1', yellow: '#FFC000',
 }
 export function countdown(s: string, verb: 'Due' | 'Starts' = 'Due') {
+  if (!hasDate(s)) return { label: 'No due date', tone: 'bg-ink/10 text-muted', urgent: false }
   const ms = parse(s).getTime() - Date.now()
   const d = Math.ceil(ms / 864e5)
   if (ms < 0) return { label: verb === 'Due' ? 'Overdue' : 'Ended', tone: 'bg-accent text-white', urgent: true }
@@ -30,6 +34,7 @@ export function downloadIcs(items: IcsItem[]) {
   a.href = URL.createObjectURL(blob); a.download = 'reminders.ics'; a.click(); URL.revokeObjectURL(a.href)
 }
 export const dateParts = (s: string) => {
+  if (!hasDate(s)) return { day: '—', mon: 'None' }
   const d = parse(s)
   return { day: d.toLocaleDateString('en-US', { ...tz, day: 'numeric' }), mon: d.toLocaleDateString('en-US', { ...tz, month: 'short' }) }
 }
