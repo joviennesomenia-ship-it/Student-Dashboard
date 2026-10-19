@@ -1,4 +1,5 @@
 import { CONFIG } from './config'
+import type { Subject, Task } from './types'
 export const parse = (s: string) => {
   if (/[zZ]$|[+-]\d\d:\d\d$/.test(s)) return new Date(s)
   return new Date((s.length === 10 ? s + 'T00:00:00' : s) + CONFIG.utcOffset)
@@ -37,3 +38,8 @@ export async function sha256(s: string) {
   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))
   return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('')
 }
+
+// A task can list one subject (subjectId) or several (subjectIds).
+export const taskSubjectIds = (t: Task) => (t.subjectIds?.length ? t.subjectIds : [t.subjectId])
+export const taskSubjects = (t: Task, subs: Subject[]) =>
+  taskSubjectIds(t).map((id) => subs.find((s) => s.id === id)).filter((s): s is Subject => !!s)
