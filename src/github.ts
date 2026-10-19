@@ -80,13 +80,13 @@ export function addToClass(list: ListName, item: { id: string }, gh: GhSettings)
 }
 
 // Uploads a file into the repo at `path` (for example public/files/name.pdf).
-export async function uploadFile(gh: GhSettings, path: string, file: File): Promise<void> {
+export async function uploadFile(gh: GhSettings, path: string, file: File, message = `Upload ${file.name}`): Promise<void> {
   const headers = check(gh)
   const bytes = new Uint8Array(await file.arrayBuffer())
   const res = await fetch(`https://api.github.com/repos/${gh.repo}/contents/${path}`, {
     method: 'PUT',
     headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: `Upload ${file.name} for reviewers`, content: encodeBytes(bytes) }),
+    body: JSON.stringify({ message, content: encodeBytes(bytes) }),
   })
   if (!res.ok) throw new Error(explain(res.status) + ' while uploading the file.')
 }
