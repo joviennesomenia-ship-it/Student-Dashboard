@@ -21,7 +21,7 @@ export default function Reviewers() {
       <Tabs id="rev-tab" value={sub} onChange={setSub} items={[['all', 'All'], ...data.subjects.map((s) => [s.id, `${s.emoji} ${s.name}`] as [string, string])]} />
       <Tabs id="term-tab" value={term} onChange={setTerm} items={[['all', 'All terms'], ['Term 1', 'Term 1'], ['Term 2', 'Term 2'], ['Term 3', 'Term 3']]} />
       {rows.length === 0 ? <Empty emoji="📚" text="No reviewers here yet." /> : (
-        <motion.ul key={sub + term + q} variants={list} initial="h" animate="s" className="grid gap-3 md:grid-cols-2">
+        <motion.ul key={sub + term + q} variants={list} initial="h" animate="s" className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {rows.map((r) => (
             <motion.li key={r.id} variants={item} whileHover={{ y: -2 }} className={cardCls}>
               <div className="flex items-start justify-between gap-2">
