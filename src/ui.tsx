@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState, type ReactNode } from 'react'
 import { useApp } from './store'
 import DeleteShared from './DeleteShared'
-import { COLORS, countdown, dateParts, downloadIcs, fmt } from './utils'
+import { COLORS, asset, countdown, dateParts, downloadIcs, fmt, taskSubjects } from './utils'
 import type { Subject, Task } from './types'
 
 export const list = { h: {}, s: { transition: { staggerChildren: 0.04 } } }
@@ -45,7 +45,8 @@ function CheckBtn({ on, onClick }: { on: boolean; onClick: () => void }) {
 export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
   const { done, toggle, removeMine } = useApp()
   const [open, setOpen] = useState(false)
-  const s = subs.find((x) => x.id === t.subjectId)
+  const ts = taskSubjects(t, subs)
+  const s = ts[0] // first subject sets the colour stripe
   const isDone = done.includes(t.id)
   const c = countdown(t.dueAt)
   const dt = dateParts(t.dueAt)
@@ -59,7 +60,7 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
         </div>
         <button className="min-w-0 flex-1 text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
           <span className={`block truncate font-semibold ${isDone ? 'text-muted line-through' : ''}`}>{t.title}</span>
-          <span className="block truncate text-sm text-muted">{s?.emoji} {s?.name}{mine ? ' · Mine' : ''} · {isDone ? 'Done' : c.label}</span>
+          <span className="block truncate text-sm text-muted">{ts.map((x) => `${x.emoji} ${x.name}`).join(' + ')}{mine ? ' · Mine' : ''} · {isDone ? 'Done' : c.label}</span>
         </button>
         {t.priority === 'High' && !isDone && <Badge tone="bg-accent/15 text-accent">High</Badge>}
         <CheckBtn on={isDone} onClick={() => toggle(t.id)} />
@@ -70,6 +71,11 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
             <div className="space-y-2 border-t border-ink/10 py-3 pl-5 pr-3 text-sm">
               {t.description && <p>{t.description}</p>}
               {t.rubric && <p className="rounded bg-ink/5 p-2"><b>Rubric:</b> {t.rubric}</p>}
+              {t.files?.map((f) => (
+                <a key={f.url} href={asset(f.url)} target="_blank" rel="noreferrer" download className="block font-medium text-primary underline">
+                  📎 {f.name}{f.size ? ` (${f.size})` : ''}
+                </a>
+              ))}
               <p className="text-muted">Due {fmt(t.dueAt)}{t.priority ? ` · ${t.priority} priority` : ''}</p>
               <div className="flex flex-wrap gap-4 font-medium">
                 {t.links?.map((l) => <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="text-primary underline">🔗 {l.label}</a>)}
