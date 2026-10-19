@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react'
 import { THEMES, themeVars } from './themes'
 import { useLS } from './store'
 
-interface Saved { name: string; p: string; a: string }
+interface Saved { name: string; p: string; a: string; custom: boolean }
 export default function ThemePicker() {
   const [open, setOpen] = useState(false)
   const [t, setT] = useLS<Saved>('theme', {
-    name: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'classic', p: '#2563eb', a: '#dc2626',
+    name: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'classic', p: '#2563eb', a: '#dc2626', custom: false,
   })
   useEffect(() => {
-    Object.entries(themeVars(t.name, t.p, t.a)).forEach(([k, v]) => document.documentElement.style.setProperty(`--${k}`, v))
+    // Older saved themes used the name "custom"; treat those as Classic with custom colours
+    const name = t.name === 'custom' ? 'classic' : t.name
+    const custom = t.custom || t.name === 'custom'
+    const v = themeVars(name, custom ? t.p : undefined, custom ? t.a : undefined)
+    Object.entries(v).forEach(([k, val]) => document.documentElement.style.setProperty(`--${k}`, val))
   }, [t])
   return (
     <div className="relative">
@@ -28,11 +32,15 @@ export default function ThemePicker() {
                 </button>
               ))}
             </div>
-            <p className="mb-1 mt-3 text-sm font-medium">Custom colors</p>
+            <p className="mb-1 mt-3 text-sm font-medium">Custom colours</p>
+            <p className="mb-2 text-xs text-muted">These change the main and accent colours. The background comes from the theme above.</p>
             <div className="flex items-center gap-3 text-sm">
-              <label>Main <input type="color" value={t.p} onChange={(e) => setT({ ...t, name: 'custom', p: e.target.value })} className="block h-8 w-14" /></label>
-              <label>Accent <input type="color" value={t.a} onChange={(e) => setT({ ...t, name: 'custom', a: e.target.value })} className="block h-8 w-14" /></label>
+              <label>Main <input type="color" value={t.p} onChange={(e) => setT({ ...t, custom: true, p: e.target.value })} className="block h-8 w-14" /></label>
+              <label>Accent <input type="color" value={t.a} onChange={(e) => setT({ ...t, custom: true, a: e.target.value })} className="block h-8 w-14" /></label>
             </div>
+            {t.custom && (
+              <button onClick={() => setT({ ...t, custom: false })} className="mt-2 text-xs text-muted underline hover:text-ink">Use the theme's own colours</button>
+            )}
             <div className="mt-3 rounded-lg bg-primary p-2 text-center text-sm text-onp">Live preview <span className="rounded bg-accent px-1.5 text-white">Urgent</span></div>
           </motion.div>
         )}
