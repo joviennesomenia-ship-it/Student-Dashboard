@@ -3,6 +3,8 @@ export interface Subject { id: string; name: string; emoji: string; color: strin
 export interface Task {
   id: string; title: string; description?: string; subjectId: string; dueAt: string
   priority?: 'Low' | 'Medium' | 'High'; rubric?: string; links?: Link[]
+  subjectIds?: string[] // optional: several subjects, e.g. for integrated performance tasks
+  files?: FileRef[]
 }
 export interface FileRef { name: string; url: string; size?: string; uploadedAt?: string }
 export type Term = 'Term 1' | 'Term 2' | 'Term 3'
