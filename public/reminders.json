@@ -65,7 +65,20 @@
       "priority": "Medium"
     }
   ],
-  "performanceTasks": [],
+  "performanceTasks": [
+    {
+      "id": "pt-1792418423204",
+      "title": "Debate",
+      "description": "* Human Gene Editing for Genetic Diseases\n  \n * Genetically Modified (GM) crops for agriculture\n    - Delmo, Del Poso \n\n * Animal testing in scientific research\n\n * Therapeutic Human cloning\n\n * Complete Ban on single-use plastic\n\n * Mandating EVs over Gasoline vehicles\n\n * Nuclear Energy in the Philippines\n  - Cruz,  Rosasenia\n\n * Institutionalizing Ai Hubs (Paxilicia Initiatives)\n\n * Ai integration in Basic Education - Demonteverde, Villamor\n\n * Agricultural Protected-zones vs Urbanization. - Oliveros, Macaranang",
+      "subjectId": "sub-2",
+      "subjectIds": [
+        "sub-2",
+        "sub-3"
+      ],
+      "dueAt": "2099-12-31T23:59:00",
+      "priority": "Medium"
+    }
+  ],
   "reviewers": [
     {
       "id": "rev-1",
