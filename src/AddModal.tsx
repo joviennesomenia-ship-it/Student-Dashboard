@@ -4,6 +4,7 @@ import { useApp, useData, type Mine } from './store'
 import { Tabs } from './ui'
 import { COLORS } from './utils'
 import { CONFIG } from './config'
+import { addToClass } from './github'
 import type { Announcement, Subject } from './types'
 
 const inp = 'w-full rounded-md border border-ink/20 bg-bg px-3 py-2 text-sm'
@@ -11,7 +12,7 @@ const COLOR_NAMES = Object.keys(COLORS)
 const PREFIX = { tasks: 'task-', performanceTasks: 'pt-', events: 'ev-', subjects: 'sub-', announcements: 'ann-' } as const
 
 export default function AddModal() {
-  const { adding, setAdding, addMine, mine, removeMine } = useApp()
+  const { adding, setAdding, addMine, mine, removeMine, gh } = useApp()
   const { data } = useData()
   const [kind, setKind] = useState<Mine['kind']>('tasks')
   const [title, setTitle] = useState('')
@@ -23,6 +24,7 @@ export default function AddModal() {
   const [color, setColor] = useState('blue')
   const [pinned, setPinned] = useState(true)
   const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
   const isSubject = kind === 'subjects'
   const isAnn = kind === 'announcements'
 
@@ -56,6 +58,19 @@ export default function AddModal() {
     const o = build(PREFIX[kind])
     await navigator.clipboard.writeText(`${JSON.stringify(o, null, 2)},`)
     setMsg(`✅ Copied. Paste it inside the "${kind}" list in reminders.json.`)
+  }
+
+  const publish = async () => {
+    if (!gh.repo || !gh.token) { setMsg('Set up ⚙️ Class settings in the footer first (one time).'); return }
+    setBusy(true); setMsg('')
+    try {
+      await addToClass(kind, build(PREFIX[kind]) as { id: string }, gh)
+      reset()
+      setMsg('✅ Published. Students will see it after the site rebuilds (about 1–2 minutes).')
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : 'Something went wrong.')
+    }
+    setBusy(false)
   }
 
   return (
@@ -112,14 +127,17 @@ export default function AddModal() {
               )}
             </div>
 
-            <div className="mt-4 flex gap-2">
-              <button disabled={!valid} onClick={save} className="flex-1 rounded-md bg-primary py-2 font-semibold text-onp disabled:opacity-40">
-                {isSubject ? 'Add subject' : isAnn ? 'Post on this device' : 'Add to my list'}
+            <button disabled={!valid || busy} onClick={publish} className="mt-4 w-full rounded-md bg-accent py-2.5 font-semibold text-onp disabled:opacity-40">
+              {busy ? 'Publishing…' : '📤 Publish to class'}
+            </button>
+            <div className="mt-2 flex gap-2">
+              <button disabled={!valid} onClick={save} className="flex-1 rounded-md bg-primary py-2 text-sm font-semibold text-onp disabled:opacity-40">
+                {isSubject ? 'Add on this device' : isAnn ? 'Post on this device' : 'Add to my list'}
               </button>
-              <button disabled={!valid} onClick={copy} className="flex-1 rounded-md border border-ink/25 py-2 font-semibold disabled:opacity-40">Copy for teacher</button>
+              <button disabled={!valid} onClick={copy} className="flex-1 rounded-md border border-ink/25 py-2 text-sm font-semibold disabled:opacity-40">Copy for teacher</button>
             </div>
             <p className="mt-3 text-xs text-muted" aria-live="polite">
-              {msg || '"My list" is saved on this device only. "Copy for teacher" makes the entry to paste into reminders.json for the whole class.'}
+              {msg || '"Publish to class" adds it for everyone. "On this device" is only for you.'}
             </p>
 
             {(isSubject || isAnn) && (isSubject ? mySubjects.length > 0 : myAnns.length > 0) && (
