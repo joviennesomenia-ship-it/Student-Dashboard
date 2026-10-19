@@ -195,7 +195,15 @@
       ]
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": "ev-1792421361013",
+      "title": "🎌UN MONTH LAUNCH! 🎌",
+      "startsAt": "2026-10-23T13:00:00",
+      "location": "",
+      "description": ""
+    }
+  ],
   "announcements": [
     {
       "id": "ann-1792419984973",
