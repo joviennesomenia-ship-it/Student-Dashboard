@@ -1,0 +1,34 @@
+{
+  "subjects": [
+    { "id": "sub-1", "name": "Mathematics", "emoji": "📐", "color": "blue" },
+    { "id": "sub-2", "name": "Science", "emoji": "🔬", "color": "green" },
+    { "id": "sub-3", "name": "English", "emoji": "📖", "color": "purple" }
+  ],
+  "tasks": [
+    { "id": "task-1", "title": "Algebra Problem Set", "description": "Complete exercises 1-10", "subjectId": "sub-1", "dueAt": "2026-10-16T23:59:00", "priority": "High" },
+    { "id": "task-2", "title": "Lab Report: Plant Growth", "description": "Submit the written report with graphs.", "subjectId": "sub-2", "dueAt": "2026-10-20T17:00:00", "priority": "High", "links": [{ "label": "Report template", "url": "https://docs.google.com" }] },
+    { "id": "task-3", "title": "Reading Log Chapter 5", "description": "Write a one-paragraph summary.", "subjectId": "sub-3", "dueAt": "2026-10-23T08:00:00", "priority": "Low" },
+    { "id": "task-4", "title": "Geometry Worksheet", "description": "Pages 44-46", "subjectId": "sub-1", "dueAt": "2026-11-01T23:59:00", "priority": "Medium" }
+  ],
+  "performanceTasks": [
+    { "id": "pt-1", "title": "Poster: Ecosystems", "description": "Make a poster showing a local ecosystem.", "subjectId": "sub-2", "dueAt": "2026-11-03T08:00:00", "rubric": "Accuracy 40%, Creativity 30%, Neatness 20%, Teamwork 10%", "links": [{ "label": "Poster examples", "url": "https://www.youtube.com" }] },
+    { "id": "pt-2", "title": "Oral Presentation", "description": "5-minute talk on your favorite book.", "subjectId": "sub-3", "dueAt": "2026-11-14T08:00:00", "rubric": "Content 50%, Delivery 30%, Visuals 20%" }
+  ],
+  "reviewers": [
+    { "id": "rev-1", "title": "Algebra Reviewer", "description": "Linear equations and inequalities.", "subjectId": "sub-1", "tag": "Quarter 2",
+      "files": [{ "name": "algebra-reviewer.pdf", "url": "files/algebra-reviewer.pdf", "size": "1.2 MB", "uploadedAt": "2026-10-10" }],
+      "links": [{ "label": "Video lesson", "url": "https://www.youtube.com" }] },
+    { "id": "rev-2", "title": "Ecosystems Notes", "description": "Producers, consumers and food webs.", "subjectId": "sub-2", "tag": "Quarter 2",
+      "files": [{ "name": "ecosystems.pptx", "url": "https://example.com/ecosystems.pptx", "size": "3.4 MB", "uploadedAt": "2026-10-12" }],
+      "links": [{ "label": "Google Drive folder", "url": "https://drive.google.com" }] }
+  ],
+  "events": [
+    { "id": "ev-1", "title": "Science Fair", "startsAt": "2026-11-05T09:00:00", "location": "School Gym", "description": "Bring your project by 8:00 AM." },
+    { "id": "ev-2", "title": "Parent-Teacher Conference", "startsAt": "2026-11-20T13:00:00", "location": "Room 204", "description": "Report card distribution." },
+    { "id": "ev-3", "title": "Intramurals Opening", "startsAt": "2026-10-10T08:00:00", "location": "Oval", "description": "Wear your team color." }
+  ],
+  "announcements": [
+    { "id": "ann-1", "title": "Welcome Back!", "body": "Please check the updated syllabus.", "pinned": true, "createdAt": "2026-10-18" },
+    { "id": "ann-2", "title": "Bring your ID", "body": "IDs are required for the science fair.", "pinned": true, "createdAt": "2026-10-17" }
+  ]
+}

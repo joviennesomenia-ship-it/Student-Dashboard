@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { --primary: 37 99 235; --accent: 220 38 38; --bg: 243 244 246; --card: 255 255 255; --text: 17 24 39; --muted: 75 85 99; --onp: 255 255 255; }
+body { @apply bg-bg font-sans text-ink antialiased; transition: background-color 0.3s, color 0.3s; }
+:focus-visible { outline: 2px solid rgb(var(--primary)); outline-offset: 2px; }
