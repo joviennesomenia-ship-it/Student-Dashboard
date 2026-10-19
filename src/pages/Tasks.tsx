@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useApp, useData } from '../store'
 import { Empty, Skeleton, TaskCard, Title, list } from '../ui'
-import { match, parse } from '../utils'
+import { match, parse, taskSubjectIds } from '../utils'
 
 const sel = 'rounded-lg bg-card px-3 py-2 text-sm ring-1 ring-ink/15'
 export default function Tasks({ kind }: { kind: 'tasks' | 'performanceTasks' }) {
@@ -13,7 +13,7 @@ export default function Tasks({ kind }: { kind: 'tasks' | 'performanceTasks' }) 
   const [st, setSt] = useState('open')
   if (isLoading || !data) return <Skeleton />
   const rows = data[kind]
-    .filter((t) => (!sub || t.subjectId === sub) && (!pri || t.priority === pri) && (st === 'all' || (st === 'done') === done.includes(t.id)) && match(q, t.title, t.description))
+    .filter((t) => (!sub || taskSubjectIds(t).includes(sub)) && (!pri || t.priority === pri) && (st === 'all' || (st === 'done') === done.includes(t.id)) && match(q, t.title, t.description))
     .sort((a, b) => +parse(a.dueAt) - +parse(b.dueAt))
   return (
     <>
