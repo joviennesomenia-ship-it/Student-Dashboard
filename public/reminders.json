@@ -57,14 +57,6 @@
   ],
   "tasks": [
     {
-      "id": "task-3",
-      "title": "Reading Log Chapter 5",
-      "description": "Write a one-paragraph summary.",
-      "subjectId": "sub-3",
-      "dueAt": "2026-10-23T08:00:00",
-      "priority": "Low"
-    },
-    {
       "id": "task-4",
       "title": "Geometry Worksheet",
       "description": "Pages 44-46",
