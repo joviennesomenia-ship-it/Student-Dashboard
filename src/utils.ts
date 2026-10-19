@@ -9,7 +9,7 @@ export const dayKey = (d: Date) => d.toLocaleDateString('en-CA', tz)
 export const match = (q: string, ...f: (string | undefined)[]) => !q || f.join(' ').toLowerCase().includes(q.toLowerCase())
 export const asset = (u: string) => (/^https?:/.test(u) ? u : import.meta.env.BASE_URL + u)
 export const COLORS: Record<string, string> = {
-  blue: '#2563eb', green: '#15803d', red: '#dc2626', purple: '#7c3aed', orange: '#c2410c', teal: '#0f766e',
+  blue: '#2563eb', green: '#15803d', red: '#dc2626', purple: '#7c3aed', orange: '#c2410c', teal: '#0f766e', pink: '#FFB6C1', yellow: '#FFC000',
 }
 export function countdown(s: string, verb: 'Due' | 'Starts' = 'Due') {
   const ms = parse(s).getTime() - Date.now()
