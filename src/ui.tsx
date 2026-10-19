@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState, type ReactNode } from 'react'
 import { useApp } from './store'
 import DeleteShared from './DeleteShared'
-import { COLORS, asset, countdown, dateParts, downloadIcs, fmt, taskSubjects } from './utils'
+import { COLORS, asset, countdown, dateParts, downloadIcs, fmt, hasDate, taskSubjects } from './utils'
 import type { Subject, Task } from './types'
 
 export const list = { h: {}, s: { transition: { staggerChildren: 0.04 } } }
@@ -50,7 +50,7 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
   const isDone = done.includes(t.id)
   const c = countdown(t.dueAt)
   const dt = dateParts(t.dueAt)
-  const mine = t.id.startsWith('me-')
+  const mine = t.id.startsWith('me-') 
   return (
     <motion.li layout variants={item} className={`overflow-hidden rounded-lg border bg-card transition-colors ${isDone ? 'border-ink/10' : 'border-ink/15 hover:border-primary/60'}`}
       style={{ boxShadow: `inset 4px 0 0 ${COLORS[s?.color ?? 'blue'] ?? COLORS.blue}` }}>
@@ -76,7 +76,7 @@ export function TaskCard({ t, subs }: { t: Task; subs: Subject[] }) {
                   📎 {f.name}{f.size ? ` (${f.size})` : ''}
                 </a>
               ))}
-              <p className="text-muted">Due {fmt(t.dueAt)}{t.priority ? ` · ${t.priority} priority` : ''}</p>
+              <p className="text-muted">{hasDate(t.dueAt) ? 'Due ' : ''}{fmt(t.dueAt)}
               <div className="flex flex-wrap gap-4 font-medium">
                 {t.links?.map((l) => <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="text-primary underline">🔗 {l.label}</a>)}
                 <button onClick={() => downloadIcs([{ id: t.id, title: t.title, at: t.dueAt, description: t.description }])} className="text-primary underline">🗓️ Add to calendar</button>
