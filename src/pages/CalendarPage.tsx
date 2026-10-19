@@ -17,7 +17,7 @@ export default function CalendarPage() {
     ...data.tasks.map((t) => ({ id: t.id, title: t.title, at: t.dueAt, type: 'task' as const, description: t.description })),
     ...data.performanceTasks.map((t) => ({ id: t.id, title: t.title, at: t.dueAt, type: 'pt' as const, description: t.description })),
     ...data.events.map((e) => ({ id: e.id, title: e.title, at: e.startsAt, type: 'event' as const, description: e.description })),
-  ].sort((a, b) => +parse(a.at) - +parse(b.at)), [data])
+  ].filter((e) => hasDate(e.at)).sort((a, b) => +parse(a.at) - +parse(b.at)), [data])
   if (isLoading || !data) return <Skeleton />
   const by = (k: string) => entries.filter((e) => dayKey(parse(e.at)) === k)
   const y = m.getFullYear(), mo = m.getMonth()
