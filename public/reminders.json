@@ -87,6 +87,22 @@
           "uploadedAt": "2026-10-19"
         }
       ]
+    },
+    {
+      "id": "task-1792462323070",
+      "title": "ANSWER PAGE 1-9 ONLY.",
+      "description": "",
+      "subjectId": "sub-1",
+      "dueAt": "2026-10-21T23:59:00",
+      "priority": "Medium",
+      "files": [
+        {
+          "name": "quadratics_-_packet_4_-_graphing_and_real_world_application.pdf",
+          "url": "files/1792462323070-quadratics_-_packet_4_-_graphing_and_real_world_application.pdf",
+          "size": "2.0 MB",
+          "uploadedAt": "2026-10-20"
+        }
+      ]
     }
   ],
   "performanceTasks": [
