@@ -79,6 +79,14 @@
           "uploadedAt": "2026-10-19"
         }
       ]
+    },
+    {
+      "id": "task-1793931222559",
+      "title": "Scaffold 2",
+      "description": "",
+      "subjectId": "sub-1792415369448",
+      "dueAt": "2026-11-06T03:01:00",
+      "priority": "Medium"
     }
   ],
   "performanceTasks": [
