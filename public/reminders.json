@@ -110,7 +110,15 @@
       "description": "",
       "subjectId": "sub-2",
       "dueAt": "2026-11-09T23:59:00",
-      "priority": "High"
+      "priority": "High",
+      "files": [
+        {
+          "name": "Biotechnology-in-the-21st-Century.pptx",
+          "url": "files/1793932071963-Biotechnology-in-the-21st-Century.pptx",
+          "size": "5.1 MB",
+          "uploadedAt": "2026-11-06"
+        }
+      ]
     }
   ],
   "performanceTasks": [
