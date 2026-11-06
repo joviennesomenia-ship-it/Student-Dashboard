@@ -79,14 +79,6 @@
           "uploadedAt": "2026-10-19"
         }
       ]
-    },
-    {
-      "id": "task-1792586052362",
-      "title": "Quiz",
-      "description": "",
-      "subjectId": "sub-1",
-      "dueAt": "2026-10-26T23:59:00",
-      "priority": "Medium"
     }
   ],
   "performanceTasks": [
