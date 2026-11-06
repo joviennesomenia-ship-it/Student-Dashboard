@@ -95,6 +95,14 @@
       "subjectId": "sub-1792415442661",
       "dueAt": "2026-11-09T23:59:00",
       "priority": "Medium"
+    },
+    {
+      "id": "task-1793931435434",
+      "title": "Speech deadline",
+      "description": "",
+      "subjectId": "sub-3",
+      "dueAt": "2026-11-07T23:59:00",
+      "priority": "High"
     }
   ],
   "performanceTasks": [
