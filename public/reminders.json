@@ -119,6 +119,14 @@
           "uploadedAt": "2026-11-06"
         }
       ]
+    },
+    {
+      "id": "task-1794368584225",
+      "title": "SCI research scaffold 2",
+      "description": "",
+      "subjectId": "sub-1",
+      "dueAt": "2026-11-13T23:59:00",
+      "priority": "Medium"
     }
   ],
   "performanceTasks": [
